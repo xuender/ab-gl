@@ -1,0 +1,7 @@
+# java
+bin
+gen
+target
+.settings
+.classpath
+.project
