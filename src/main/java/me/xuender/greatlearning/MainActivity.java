@@ -5,7 +5,6 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.MediaController;
 import android.widget.MediaController.MediaPlayerControl;
@@ -19,22 +18,66 @@ import android.widget.MediaController.MediaPlayerControl;
 public class MainActivity extends Activity implements OnPreparedListener,
 		MediaPlayerControl {
 	private MediaController mediaController;
+	private MediaPlayer mediaPlayer;
 	private Handler handler = new Handler();
+	private static MediaPlayerControl instance;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		mediaController = new MediaController(this);
-		Player.play(this);
-		Player.getPlayer().setOnPreparedListener(this);
+		mediaPlayer = MediaPlayer.create(this, R.raw.gl);
+		mediaPlayer.setOnPreparedListener(this);
+		mediaPlayer.setLooping(false);
+		instance = this;
+		start();
+	}
+
+	static MediaPlayerControl getInstance() {
+		return instance;
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		Player.stop();
+		mediaPlayer.stop();
 		System.exit(0);
+	}
+
+	@Override
+	public void start() {
+		mediaPlayer.start();
+	}
+
+	@Override
+	public void pause() {
+		mediaPlayer.pause();
+	}
+
+	@Override
+	public int getDuration() {
+		return mediaPlayer.getDuration();
+	}
+
+	@Override
+	public int getCurrentPosition() {
+		return mediaPlayer.getCurrentPosition();
+	}
+
+	@Override
+	public void seekTo(int pos) {
+		mediaPlayer.seekTo(pos);
+	}
+
+	@Override
+	public boolean isPlaying() {
+		return mediaPlayer.isPlaying();
+	}
+
+	@Override
+	public int getBufferPercentage() {
+		return 0;
 	}
 
 	@Override
@@ -44,61 +87,12 @@ public class MainActivity extends Activity implements OnPreparedListener,
 
 	@Override
 	public boolean canSeekBackward() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean canSeekForward() {
-		return false;
-	}
-
-	@Override
-	public int getAudioSessionId() {
-		return 0;
-	}
-
-	@Override
-	public int getBufferPercentage() {
-		return 0;
-	}
-
-	@Override
-	public int getCurrentPosition() {
-		return Player.getPlayer().getCurrentPosition();
-	}
-
-	@Override
-	public int getDuration() {
-		return Player.getPlayer().getDuration();
-	}
-
-	@Override
-	public boolean isPlaying() {
-		return Player.getPlayer().isPlaying();
-	}
-
-	@Override
-	public void pause() {
-		Log.d("play", "pause");
-		Player.pause();
-	}
-
-	@Override
-	public void seekTo(int arg0) {
-		Player.seekTo(arg0);
-	}
-
-	@Override
-	public void start() {
-		Log.d("play", "start");
-		Player.start();
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-		mediaController.hide();
-		Player.stop();
+		return true;
 	}
 
 	@Override
@@ -108,7 +102,7 @@ public class MainActivity extends Activity implements OnPreparedListener,
 	}
 
 	@Override
-	public void onPrepared(MediaPlayer arg0) {
+	public void onPrepared(MediaPlayer mp) {
 		mediaController.setMediaPlayer(this);
 		mediaController.setAnchorView(findViewById(R.id.main_audio_view));
 		handler.post(new Runnable() {
@@ -117,5 +111,10 @@ public class MainActivity extends Activity implements OnPreparedListener,
 				mediaController.show();
 			}
 		});
+	}
+
+	@Override
+	public int getAudioSessionId() {
+		return mediaPlayer.getAudioSessionId();
 	}
 }

@@ -8,9 +8,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.telephony.TelephonyManager;
+import android.widget.MediaController.MediaPlayerControl;
 
 /**
- * 来电监视
+ * 来电监听
  * 
  * @author ender
  * 
@@ -21,14 +22,14 @@ public class CallReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		TelephonyManager tm = (TelephonyManager) context
 				.getSystemService(Service.TELEPHONY_SERVICE);
-
+		MediaPlayerControl mediaPlayerControl = MainActivity.getInstance();
 		switch (tm.getCallState()) {
 		case TelephonyManager.CALL_STATE_RINGING:
-			Player.pause(true);
+			mediaPlayerControl.pause();
 			break;
 		case TelephonyManager.CALL_STATE_IDLE:
-			if (Player.isPlay()) {
-				Player.start();
+			if (mediaPlayerControl.isPlaying()) {
+				mediaPlayerControl.start();
 			}
 		}
 	}
