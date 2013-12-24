@@ -4,16 +4,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>me.xuender</groupId>
 	<artifactId>greatlearning</artifactId>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.2</version>
 	<packaging>apk</packaging>
 	<name>greatlearning</name>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<platform.version>4.1.1.4</platform.version>
 		<android.plugin.version>3.5.3</android.plugin.version>
 	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.google.android</groupId>
@@ -51,6 +49,30 @@
 						<platform>18</platform>
 					</sdk>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jarsigner-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<id>sign</id>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+						<phase>package</phase>
+						<inherited>true</inherited>
+						<configuration>
+							<includes>
+								<include>${project.build.outputDirectory}/*.apk</include>
+							</includes>
+							<keystore>${keystore.filename}</keystore>
+							<storepass>${keystore.storepass}</storepass>
+							<keypass>${keystore.keypass}</keypass>
+							<alias>${keystore.alias}</alias>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

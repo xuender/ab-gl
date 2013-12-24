@@ -113,7 +113,6 @@ public class MainActivity extends Activity implements OnPreparedListener,
 		});
 	}
 
-	@Override
 	public int getAudioSessionId() {
 		return mediaPlayer.getAudioSessionId();
 	}
