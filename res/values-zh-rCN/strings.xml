@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">《大学》苏志辉朗读</string>
-
+    <string name="app_name">《大学》乌托邦有声读物</string>
+    <string name="action_settings">设置</string>
+    <string name="exit_msg">再按一次，退出大学</string>
 </resources>
